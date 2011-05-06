@@ -11,6 +11,7 @@ def addImage(title,bf,referer):
     image.filetype,image.width,image.height=getImageInfo(bf)
     if not image.filetype:return None
     image.mime=image.filetype
+    
     image.put()
     return image
 

@@ -1,7 +1,7 @@
 #coding:utf-8
 import sys
-sys.path.append( "lib/"); 
-import oauth
+sys.path.append( "dropbox/"); 
+import oauth,auth,client,rest
 import wsgiref.handlers
 import urllib2
 import os
@@ -51,15 +51,27 @@ class Admin_Upload(AdminControl):
         referer=self.request.get("referer")
         xhrLocation=self.request.get("xhrLocation")
         image=methods.addImage( title, f, referer)
-        
+
         self.render('views/posted.html', {"msg":"success","xhrLocation":xhrLocation})
         
 class Admin_read(AdminControl):
     @requires_admin
     def get(self):
-        o = urllib2.build_opener();
-        f = o.open('http://img1.cache.netease.com/cnews/2011/5/6/20110506083751ebe4c.jpg');
-        print f
+        
+        f = urllib2.urlopen('http://img1.cache.netease.com/cnews/2011/5/6/20110506083751ebe4c.jpg')
+        image=methods.addImage("11111",f.read(),"http://1111")
+        
+        config = auth.Authenticator.load_config("config/dropbox.ini")
+        dba = auth.Authenticator(config)
+        #access_token = dba.obtain_trusted_access_token(config['testing_user'], config['testing_password'])
+        access_token = oauth.OAuthToken.from_string("oauth_token_secret=f16we6l2pn4mkx5&oauth_token=299vslb2j8xg8ns")
+        db_client = client.DropboxClient(config['server'], config['content_server'], config['port'], dba, access_token)
+        root = config['root']
+        
+        image.name = "20110506083751ebe4c.jpg";
+    
+        resp = db_client.put_file(root, "/", image)
+        print resp
 
 class Delete_Image(AdminControl):
     @requires_admin
@@ -81,7 +93,6 @@ class Admin_Login(AdminControl):
 def main():
     application = webapp.WSGIApplication(
                                        [(r'/admin/upload/', Admin_Upload),
-                                        (r'/admin/upload2/', Admin_Upload2),
                                         (r'/admin/read/', Admin_read),
                                         (r'/admin/del/(?P<key>[a-z,A-Z,0-9,-]+)', Delete_Image),
                                         (r'/admin/delid/(?P<id>[0-9]+)/', Delete_Image_ID),
