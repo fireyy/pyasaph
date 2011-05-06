@@ -1,4 +1,7 @@
 #coding:utf-8
+import sys
+sys.path.append( "lib/"); 
+import oauth
 import wsgiref.handlers
 import urllib2
 import os
