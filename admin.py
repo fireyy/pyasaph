@@ -1,7 +1,7 @@
 #coding:utf-8
 import sys
-sys.path.append( "lib/"); 
-import oauth
+sys.path.append( "dropbox/"); 
+import auth,client,rest
 import wsgiref.handlers
 import urllib2
 import os
@@ -51,15 +51,22 @@ class Admin_Upload(AdminControl):
         referer=self.request.get("referer")
         xhrLocation=self.request.get("xhrLocation")
         image=methods.addImage( title, f, referer)
-        
+
         self.render('views/posted.html', {"msg":"success","xhrLocation":xhrLocation})
         
 class Admin_read(AdminControl):
     @requires_admin
     def get(self):
+        config = auth.Authenticator.load_config("config/dropbox.ini")
+        dba = auth.Authenticator(config)
+        access_token = dba.obtain_trusted_access_token(config['testing_user'], config['testing_password'])
+        db_client = client.DropboxClient(config['server'], config['content_server'], config['port'], dba, access_token)
+        root = config['root']
         o = urllib2.build_opener();
         f = o.open('http://img1.cache.netease.com/cnews/2011/5/6/20110506083751ebe4c.jpg');
-        print f
+        resp = db_client.put_file(root, "/", f)
+        assert resp
+        assert_equal(resp.status, 200)
 
 class Delete_Image(AdminControl):
     @requires_admin
@@ -81,7 +88,6 @@ class Admin_Login(AdminControl):
 def main():
     application = webapp.WSGIApplication(
                                        [(r'/admin/upload/', Admin_Upload),
-                                        (r'/admin/upload2/', Admin_Upload2),
                                         (r'/admin/read/', Admin_read),
                                         (r'/admin/del/(?P<key>[a-z,A-Z,0-9,-]+)', Delete_Image),
                                         (r'/admin/delid/(?P<id>[0-9]+)/', Delete_Image_ID),
