@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{image.created_at}}{% endblock %}
+{% block main %}
+<h2><a href="/" title="图片列表">图片列表</a>  <a href="/admin/upload2/" title="上传图片">上传图片</a></h2>
+{% if image %}
+<div id="showimg">
+<a href="/image/{{image.id}}/" target="_black">
+<img  src="/image/{{image.id}}/" alt="{{image.name}}" /></a>
+<br />
+<dl>
+<dt><strong>图片信息</strong></dt>
+<dd>标题:{{image.description}}</dd>
+<dd>文件类型:{{image.filetype}}</dd>
+<dd>分辨率:{{image.width}}*{{image.height}}</dd>
+<dd>图片大小:{{image.size|filesizeformat}}</dd>
+<dd>上传时间:{{image.created_at}}</dd>
+<dd>来源:{{image.referer}}</dd>
+<dd>{% if admin %}<a href="/admin/delid/{{image.id}}/">删除</a>{% endif %}</dd>
+</dl>
+</div>
+{% endif %}
+{% endblock %}
+</body>
+</html>

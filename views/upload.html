@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Post: Asaph</title>
+	<link rel="stylesheet" type="text/css" href="/static/post.css" />
+</head>
+<body class="Asaph_Post" onload="document.getElementById('title').focus();">
+    {% if msg %}
+    <h1 id="Asaph_PostSuccess">
+		Posted!
+	</h1>
+	<script type="text/javascript">
+		if( parent ) {
+			parent.location = "{{xhrLocation}}#Asaph_Success";
+		}
+	</script>
+    {% else %}
+    <h1>
+		Post Image:
+	</h1>
+	
+		<div class="warn" style="display:none;">
+
+		</div>
+	
+	<form action="/admin/upload/" method="post">
+		<input type="hidden" name="xhrLocation" value="{{xhrLocation}}"/>
+		<span class="warn" style="display:none;">The name or password was not correct!</span>
+		<dl>
+				<dt>Title:</dt>
+				<dd><input id="title" type="text" name="title" class="long" value="{{title}}"/></dd>
+				<dt>Image:</dt>
+				<dd>
+					<input type="text" name="image" class="long" value="{{image}}"/>
+				</dd>
+				<dt>Site:</dt>
+				<dd>
+					<input type="text" name="referer" class="long" value="{{referer}}"/>
+				</dd>
+			<dt></dt>
+			<dd><input type="submit" name="post" value="Post" class="button"/></dd>
+		</dl>
+	</form>
+    {% endif%}
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{% block title %}{% endblock %}</title>
+<link href="/static/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/main.js"></script>
+</head>
+<body>
+<div id="main">
+{% block main %}{% endblock %}
+<p id="copyright"><a href="/admin/">管理登陆</a> | <a href="javascript:void((function(){var e=document.createElement('script');e.type='text/javascript';e.src='http://localhost:8080/static/post.js';document.body.appendChild(e)})());">Bookmark</a></p>
+</div>
+</body>
+</html>
