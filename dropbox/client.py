@@ -113,6 +113,7 @@ class DropboxClient(object):
 
         resp = rest.RESTResponse(conn.getresponse())
         conn.close()
+        file_obj.close()
 
         return resp
         
